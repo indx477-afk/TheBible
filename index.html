@@ -172,11 +172,11 @@ const post=o=>({method:'POST',headers:{'Content-Type':'application/json'},body:J
 let lastSearch=null,info=null,books=[],tr=ls.get('tr')||'asv',terms=[],cur=null,gsi=false;
 const chCache={};
 
-// Request data from PHP
+// Request data from the API
 async function jget(url,opt){
 const res=await fetch(url,opt);
 let d;
-try{d=await res.json();}catch{d={error:'Unexpected server response. Is PHP running?'};}
+try{d=await res.json();}catch{d={error:'Unexpected server response. Is the server running?'};}
 if(!res.ok||d.error)throw new Error(d.error||'Request failed');
 return d;
 }
@@ -192,7 +192,7 @@ text.split(new RegExp('(?<!\\w)('+alt+')(?!\\w)','gi')).forEach((p,i)=>node.appe
 
 // Load Bible information and translations
 async function loadInfo(){
-info=await jget('bible.php?'+qs({}));
+info=await jget('/api/bible?'+qs({}));
 tr=info.translation;
 ls.set('tr',tr);
 books=info.books;
@@ -226,7 +226,7 @@ if(info.user){
 if(info.user.picture){const i=el('img','avatar');i.src=info.user.picture;i.alt='';i.referrerPolicy='no-referrer';box.append(i);}
 box.append(el('span','who',info.user.name.split(' ')[0]));
 const out=el('button','btn light','Sign out');
-out.onclick=async()=>{await jget('auth.php',post({action:'logout'}));await loadInfo();route();renderDaily();};
+out.onclick=async()=>{await jget('/api/auth',post({action:'logout'}));await loadInfo();route();renderDaily();};
 box.append(out);
 }else{
 box.append(el('span','hint','Sign in to choose a translation'));
@@ -243,7 +243,7 @@ if(/^YOUR_CLIENT_ID/.test(info.google_client_id)){g.className='hint';g.textConte
 google.accounts.id.initialize({
 client_id:info.google_client_id,
 callback:async r=>{
-try{await jget('auth.php',post({action:'login',credential:r.credential}));await loadInfo();route();renderDaily();}
+try{await jget('/api/auth',post({action:'login',credential:r.credential}));await loadInfo();route();renderDaily();}
 catch(e){alert(e.message);}
 }
 });
@@ -270,7 +270,7 @@ addEventListener('hashchange',route);
 // Chapter and verse dropdowns
 async function getChapters(id){
 const k=tr+id;
-if(!chCache[k])chCache[k]=(await jget('chapters.php?'+qs({book:id}))).chapters;
+if(!chCache[k])chCache[k]=(await jget('/api/chapters?'+qs({book:id}))).chapters;
 return chCache[k];
 }
 function fillChapters(list,selected){
@@ -313,7 +313,7 @@ $('#bookSel').value=id;
 const chs=await getChapters(id).catch(()=>[]);
 fillChapters(chs,ch);
 try{
-const d=await jget('verse.php?'+qs({book:id,chapter:ch}));
+const d=await jget('/api/verse?'+qs({book:id,chapter:ch}));
 cur={b,ch,chs,verses:d.verses};
 renderVerses(vs);
 }catch(e){
@@ -398,7 +398,7 @@ const box=$('#results'),sum=$('#sSum');
 box.replaceChildren();
 sum.textContent='Searching…';
 try{
-const d=await jget('verse.php?'+qs({q:text}));
+const d=await jget('/api/verse?'+qs({q:text}));
 terms=d.terms;
 const name=info.translations[d.translation]||d.translation.toUpperCase();
 sum.textContent=d.total
@@ -434,7 +434,7 @@ const day=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);
 const [id,ch,from,to]=DAILY[day%DAILY.length];
 const box=$('#daily');
 try{
-const d=await jget('verse.php?'+qs({book:id,chapter:ch}));
+const d=await jget('/api/verse?'+qs({book:id,chapter:ch}));
 const picked=d.verses.filter(v=>v.verse>=from&&v.verse<=to);
 const bookName=(books.find(b=>b.id===id)||{name:id}).name;
 const a=el('a',0,`${bookName} ${ch}:${from}`+(to>from?'-'+to:'')+` (${tr.toUpperCase()})`);

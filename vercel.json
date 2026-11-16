@@ -1,0 +1,6 @@
+{
+  "functions": {
+    "api/verse.js": { "includeFiles": "data/**", "maxDuration": 30 },
+    "api/bible.js": { "includeFiles": "data/**" }
+  }
+}
