@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Bible</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f3ea;--surface:#fffdf8;--ink:#1d2140;--muted:#6a6d86;--brand:#2b2f6b;--link:#3a3f94;--gold:#d9962b;--line:#e4dccb;--hl:#fde9b0;--target:#fbe7b5}
+@media(prefers-color-scheme:dark){:root{--bg:#12142b;--surface:#1b1e3d;--ink:#eceaf5;--muted:#9a9cc0;--brand:#0d0f24;--link:#b9bcf5;--gold:#f0b04a;--line:#2f3363;--hl:#5a4514;--target:#3a3320}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-padding-top:5rem}
+body{margin:0;background:var(--bg);color:var(--ink);font:1.15rem/1.6 "Crimson Pro",Georgia,serif;padding-bottom:env(safe-area-inset-bottom,0)}
+h1,h2,.logo,.btn,.daily cite,.who{font-family:"Playfair Display",Georgia,serif}
+a{color:var(--link)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.wrap{max-width:62rem;margin:0 auto;padding:0 1rem}
+.top{position:sticky;top:0;z-index:20;background:var(--brand);color:#fff;padding-top:env(safe-area-inset-top,0)}
+.top .wrap{display:flex;align-items:center;gap:.6rem 1rem;flex-wrap:wrap;padding-top:.55rem;padding-bottom:.55rem}
+.logo{margin-right:auto;color:#fff;text-decoration:none;font-size:1.45rem;font-weight:700}
+.logo b{color:var(--gold)}
+#account{display:flex;align-items:center;gap:.6rem}
+.avatar{width:28px;height:28px;border-radius:50%}
+.who{color:var(--gold);font-size:.95rem}
+.hint{color:var(--gold);font:.85rem system-ui,sans-serif}
+select,input{height:2.5rem;border:1px solid var(--line);border-radius:.6rem;background:var(--bg);color:var(--ink);font:1rem system-ui,sans-serif;padding:0 .7rem;min-width:0}
+#trSel{max-width:15rem;background:#ffffff1a;color:#fff;border-color:#ffffff59;border-radius:2rem}
+#trSel option{color:#1d2140}
+select:disabled{opacity:.85}
+.btn{display:inline-flex;align-items:center;height:2.5rem;padding:0 1.1rem;border:0;border-radius:.6rem;background:var(--gold);color:#1d1400;font-size:.9rem;font-weight:700;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:hover{filter:brightness(1.08)}
+.btn.light{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.top .btn.light{background:transparent;color:#fff;border-color:#ffffff59;border-radius:2rem}
+.hero{background:linear-gradient(180deg,#2b2f6b 0%,#8a4f7d 60%,#f0a65a 100%);color:#fff;text-align:center;padding:2rem 1rem 4.2rem}
+.hero h1{margin:0;font-size:clamp(2.1rem,7vw,3.4rem);letter-spacing:.02em}
+.hero p{margin:.3rem 0 0;font:.8rem system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;opacity:.9}
+.bar{max-width:62rem;margin:-2.8rem auto 0;padding:0 .75rem;position:relative;z-index:5}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:1rem;padding:.9rem;box-shadow:0 8px 24px #0002;display:grid;gap:.7rem}
+.panel form{display:flex;flex-wrap:wrap;gap:.5rem}
+.panel label{width:100%;font:700 .72rem system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.panel input{flex:1 1 12rem}
+#bookSel{flex:2 1 9rem}
+#chSel,#vsSel{flex:1 1 4.5rem}
+@media(min-width:56rem){.panel{grid-template-columns:1fr 1fr;gap:1.2rem}}
+.sheet{max-width:62rem;width:calc(100% - 1.5rem);margin:1.2rem auto 1rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:1rem;padding:1.1rem clamp(1rem,4vw,2rem) 1.6rem;margin-bottom:1rem}
+.card h2{margin:0 0 .8rem;padding-bottom:.4rem;border-bottom:1px solid var(--line);color:var(--muted);font:700 .78rem system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase}
+.daily{text-align:center;padding:.4rem .5rem}
+.daily blockquote{margin:0 auto;max-width:38rem;font-size:clamp(1.25rem,3.4vw,1.65rem);line-height:1.4}
+.daily cite{display:block;margin-top:.6rem;font-size:.9rem;font-style:normal}
+.testaments{display:grid;gap:0 1rem}
+@media(min-width:48rem){.testaments{grid-template-columns:1fr 1fr}}
+.index{display:grid;grid-template-columns:repeat(auto-fill,minmax(8.5rem,1fr));gap:.1rem .6rem}
+.index a{display:block;padding:.3rem .4rem;text-decoration:none;border-radius:.4rem}
+.index a:hover{background:var(--bg);color:var(--gold)}
+.crumb{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-bottom:.9rem}
+.crumb .btn{height:2.2rem;border-radius:2rem;font-family:system-ui,sans-serif;font-weight:600}
+.crumb .sp{margin-left:auto}
+.rhead{display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;padding-bottom:.4rem;border-bottom:1px solid var(--line)}
+.rhead h1{margin:0;font-size:1.8rem}
+#rNote{display:flex;align-items:center;gap:.5rem;font-size:1rem;color:var(--muted)}
+.verses{max-width:46rem;margin-top:1rem}
+.verses p{margin:0 0 .7rem;padding:.1rem .4rem;border-radius:.4rem;font-size:1.3rem;line-height:1.65}
+.verses sup{margin-right:.4rem;color:var(--gold);font:700 .72rem "Playfair Display",serif}
+.verses p.target{background:var(--target)}
+mark{background:var(--hl);color:inherit;border-radius:.2rem;padding:0 .1rem}
+.pager{display:flex;justify-content:space-between;gap:.75rem;margin-top:1.5rem}
+.pager .btn{flex:1;justify-content:center}
+.res{display:block;padding:.7rem .4rem;border-bottom:1px solid var(--line);color:inherit;text-decoration:none;border-radius:.4rem}
+.res:hover{background:var(--bg)}
+.res b{display:block;color:var(--link);font:700 .9rem "Playfair Display",serif}
+.note{color:var(--gold)}
+.foot{text-align:center;color:var(--muted);padding:0 1rem 2rem;font-size:.95rem}
+</style>
+</head>
+<body>
+<header class="top">
+<div class="wrap">
+<a class="logo" href="#/">The Bible<b>.</b></a>
+<select id="trSel" aria-label="Translation"></select>
+<div id="account"></div>
+</div>
+</header>
+
+<section class="hero">
+<h1>The Bible</h1>
+<p id="heroSub"></p>
+</section>
+
+<section class="bar">
+<div class="panel">
+<form id="searchForm">
+<label for="q">Search the Bible</label>
+<input id="q" type="search" placeholder="Search words or verses…" autocomplete="off">
+<button class="btn">Search</button>
+</form>
+<form id="jumpForm">
+<label for="bookSel">Select a book</label>
+<select id="bookSel"></select>
+<select id="chSel" aria-label="Chapter"></select>
+<select id="vsSel" aria-label="Verse"></select>
+<button class="btn">Go</button>
+</form>
+</div>
+</section>
+
+<main class="sheet">
+<section id="home">
+<div class="card" id="dailyBox">
+<h2>Verse of the day</h2>
+<div class="daily" id="daily"></div>
+</div>
+<div class="testaments">
+<div class="card">
+<h2>Old Testament</h2>
+<nav class="index" id="ot"></nav>
+</div>
+<div class="card">
+<h2>New Testament</h2>
+<nav class="index" id="nt"></nav>
+</div>
+</div>
+</section>
+
+<section id="search" hidden>
+<div class="crumb">
+<a class="btn light" href="#/">&larr; Back to home</a>
+</div>
+<div class="card">
+<h2>Search results</h2>
+<p id="sSum"></p>
+<div id="results"></div>
+</div>
+</section>
+
+<section id="reader" hidden>
+<div class="crumb">
+<a class="btn light" href="#/">&larr; Home</a>
+<button class="btn light" id="toResults" type="button" hidden>&larr; Back to results</button>
+<button class="btn light prev sp" type="button">&larr; Prev</button>
+<button class="btn light next" type="button">Next &rarr;</button>
+</div>
+<div class="card">
+<div class="rhead">
+<h1 id="rTitle"></h1>
+<span id="rNote"></span>
+</div>
+<div class="verses" id="verses"></div>
+<div class="pager">
+<button class="btn light prev" type="button">&larr; Previous chapter</button>
+<button class="btn light next" type="button">Next chapter &rarr;</button>
+</div>
+</div>
+</section>
+</main>
+<p class="foot">Public domain translations from bible-api.com.</p>
+
+<script>
+// Verse references for the daily display
+const DAILY=[['JAS',4,10,10],['JHN',3,16,16],['PSA',23,1,3],['JER',29,11,11],['ROM',8,28,28],['PRO',3,5,6],['ISA',41,10,10],['MAT',11,28,30],['JOS',1,9,9],['PSA',46,1,3],['ROM',12,2,2],['2TI',1,7,7],['LAM',3,22,23],['PHP',4,6,7],['1CO',13,4,7]];
+const NT=new Set('MAT MRK LUK JHN ACT ROM 1CO 2CO GAL EPH PHP COL 1TH 2TH 1TI 2TI TIT PHM HEB JAS 1PE 2PE 1JN 2JN 3JN JUD REV'.split(' '));
+
+// Common helpers
+const $=s=>document.querySelector(s);
+const el=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;};
+const ls={get:k=>{try{return localStorage.getItem(k);}catch{return null;}},set:(k,v)=>{try{localStorage.setItem(k,v);}catch{}}};
+const post=o=>({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)});
+
+let lastSearch=null,info=null,books=[],tr=ls.get('tr')||'asv',terms=[],cur=null,gsi=false;
+const chCache={};
+
+// Request data from PHP
+async function jget(url,opt){
+const res=await fetch(url,opt);
+let d;
+try{d=await res.json();}catch{d={error:'Unexpected server response. Is PHP running?'};}
+if(!res.ok||d.error)throw new Error(d.error||'Request failed');
+return d;
+}
+const qs=o=>new URLSearchParams({...o,tr}).toString();
+const go=h=>location.hash===h?route():(location.hash=h);
+
+// Highlight matching search words
+function hl(node,text){
+if(!terms.length){node.append(text);return;}
+const alt=terms.map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');
+text.split(new RegExp('(?<!\\w)('+alt+')(?!\\w)','gi')).forEach((p,i)=>node.append(i%2?el('mark',0,p):p));
+}
+
+// Load Bible information and translations
+async function loadInfo(){
+info=await jget('bible.php?'+qs({}));
+tr=info.translation;
+ls.set('tr',tr);
+books=info.books;
+const ts=$('#trSel');
+ts.replaceChildren();
+Object.entries(info.translations).forEach(([k,n])=>{const o=el('option',0,n);o.value=k;ts.append(o);});
+ts.value=tr;
+ts.disabled=!info.user;
+$('#heroSub').textContent=info.translations[tr];
+document.title='The Bible, '+tr.toUpperCase();
+
+const bs=$('#bookSel'),keep=bs.value;
+bs.replaceChildren();
+books.forEach(b=>{const o=el('option',0,b.name);o.value=b.id;bs.append(o);});
+if(books.some(b=>b.id===keep))bs.value=keep;
+
+[['#ot',b=>!NT.has(b.id)],['#nt',b=>NT.has(b.id)]].forEach(([sel,test])=>{
+const box=$(sel);
+box.replaceChildren();
+books.filter(test).forEach(b=>{const a=el('a',0,b.name);a.href=`#/read/${b.id}/1`;box.append(a);});
+});
+renderAccount();
+}
+$('#trSel').onchange=async e=>{tr=e.target.value;await loadInfo();route();renderDaily();};
+
+// Google account display and sign-in
+function renderAccount(){
+const box=$('#account');
+box.replaceChildren();
+if(info.user){
+if(info.user.picture){const i=el('img','avatar');i.src=info.user.picture;i.alt='';i.referrerPolicy='no-referrer';box.append(i);}
+box.append(el('span','who',info.user.name.split(' ')[0]));
+const out=el('button','btn light','Sign out');
+out.onclick=async()=>{await jget('auth.php',post({action:'logout'}));await loadInfo();route();renderDaily();};
+box.append(out);
+}else{
+box.append(el('span','hint','Sign in to choose a translation'));
+const g=el('div');
+g.id='gbtn';
+box.append(g);
+initGoogle();
+}
+}
+function initGoogle(){
+const g=$('#gbtn');
+if(!g||!gsi||!info)return;
+if(/^YOUR_CLIENT_ID/.test(info.google_client_id)){g.className='hint';g.textContent='Google sign-in is not set up yet.';return;}
+google.accounts.id.initialize({
+client_id:info.google_client_id,
+callback:async r=>{
+try{await jget('auth.php',post({action:'login',credential:r.credential}));await loadInfo();route();renderDaily();}
+catch(e){alert(e.message);}
+}
+});
+google.accounts.id.renderButton(g,{theme:'filled_black',size:'medium',shape:'pill'});
+}
+window.gsiReady=()=>{gsi=true;initGoogle();};
+
+// Display the correct page based on the URL
+function show(v){
+['home','reader','search'].forEach(x=>$('#'+x).hidden=x!==v);
+window.scrollTo(0,0);
+}
+function route(){
+const [,view,a,b,c]=location.hash.split('/');
+if(view==='read'&&a&&+b>0)return openReader(a,+b,+c||0);
+if(view==='search'&&a)return runSearch(decodeURIComponent(a));
+terms=[];
+lastSearch=null;
+show('home');
+syncChapters();
+}
+addEventListener('hashchange',route);
+
+// Chapter and verse dropdowns
+async function getChapters(id){
+const k=tr+id;
+if(!chCache[k])chCache[k]=(await jget('chapters.php?'+qs({book:id}))).chapters;
+return chCache[k];
+}
+function fillChapters(list,selected){
+const s=$('#chSel');
+s.replaceChildren();
+list.forEach(n=>{const o=el('option',0,n);o.value=n;s.append(o);});
+s.value=selected;
+}
+async function syncChapters(){
+$('#vsSel').replaceChildren();
+fillChapters(await getChapters($('#bookSel').value).catch(()=>[]),1);
+}
+$('#bookSel').onchange=()=>{lastSearch=null;go(`#/read/${$('#bookSel').value}/1`);};
+$('#chSel').onchange=()=>{lastSearch=null;go(`#/read/${$('#bookSel').value}/${$('#chSel').value}`);};
+$('#vsSel').onchange=()=>{
+const t=document.getElementById('v'+$('#vsSel').value);
+if(!t||$('#reader').hidden)return;
+document.querySelectorAll('.verses p.target').forEach(p=>p.classList.remove('target'));
+t.classList.add('target');
+t.scrollIntoView({block:'center',behavior:'smooth'});
+};
+$('#jumpForm').onsubmit=e=>{
+e.preventDefault();
+const id=$('#bookSel').value,ch=+$('#chSel').value,vs=$('#vsSel').value;
+lastSearch=null;
+const same=cur&&cur.b.id===id&&cur.ch===ch;
+go(`#/read/${id}/${ch}`+(same&&vs?'/'+vs:''));
+};
+
+// Open and display a Bible chapter
+async function openReader(id,ch,vs){
+const b=books.find(x=>x.id===id);
+if(!b){go('#/');return;}
+show('reader');
+$('#toResults').hidden=!lastSearch;
+$('#rTitle').textContent=`${b.name} ${ch}`;
+$('#rNote').textContent='Loading…';
+$('#verses').replaceChildren();
+$('#bookSel').value=id;
+const chs=await getChapters(id).catch(()=>[]);
+fillChapters(chs,ch);
+try{
+const d=await jget('verse.php?'+qs({book:id,chapter:ch}));
+cur={b,ch,chs,verses:d.verses};
+renderVerses(vs);
+}catch(e){
+$('#rNote').textContent=e.message;
+}
+}
+function renderVerses(vs){
+const box=$('#verses'),sel=$('#vsSel'),note=$('#rNote');
+box.replaceChildren();
+sel.replaceChildren();
+cur.verses.forEach(v=>{
+const p=el('p');
+p.id='v'+v.verse;
+p.append(el('sup',0,v.verse));
+hl(p,v.text);
+box.append(p);
+const o=el('option',0,v.verse);
+o.value=v.verse;
+sel.append(o);
+});
+note.replaceChildren();
+if(terms.length){
+note.append('Highlighting '+terms.join(', '));
+const clear=el('button','btn light','Clear');
+clear.type='button';
+clear.onclick=()=>{terms=[];renderVerses(vs);};
+note.append(clear);
+}
+const target=vs&&document.getElementById('v'+vs);
+if(target){
+target.classList.add('target');
+sel.value=vs;
+target.scrollIntoView({block:'center'});
+}
+}
+
+// Move between chapters and books
+async function step(dir){
+if(!cur||$('#reader').hidden)return;
+const {b,ch,chs}=cur,i=books.indexOf(b);
+if(dir>0){
+if(ch<chs[chs.length-1])return go(`#/read/${b.id}/${ch+1}`);
+if(i<books.length-1)return go(`#/read/${books[i+1].id}/1`);
+}else{
+if(ch>1)return go(`#/read/${b.id}/${ch-1}`);
+if(i>0){const p=await getChapters(books[i-1].id);return go(`#/read/${books[i-1].id}/${p[p.length-1]}`);}
+}
+}
+document.querySelectorAll('.prev').forEach(b=>b.onclick=()=>step(-1));
+document.querySelectorAll('.next').forEach(b=>b.onclick=()=>step(1));
+$('#toResults').onclick=()=>lastSearch&&go('#/search/'+encodeURIComponent(lastSearch));
+addEventListener('keydown',e=>{
+if(e.target.matches('input,select'))return;
+if(e.key==='ArrowLeft')step(-1);
+if(e.key==='ArrowRight')step(1);
+});
+
+// Search by Bible reference or words
+function parseRef(s){
+const m=s.match(/^((?:[1-3]\s?)?[A-Za-z][A-Za-z ]*?)\.?\s+(\d{1,3})(?::(\d{1,3}))?$/);
+if(!m)return null;
+const name=m[1].toLowerCase().replace(/\s+/g,' ');
+const b=books.find(b=>b.name.toLowerCase()===name)||books.find(b=>b.name.toLowerCase().startsWith(name));
+return b?{b,ch:+m[2],vs:m[3]||''}:null;
+}
+$('#searchForm').onsubmit=e=>{
+e.preventDefault();
+const text=$('#q').value.trim();
+if(!text)return;
+const r=parseRef(text);
+if(r){
+terms=[];
+lastSearch=null;
+go(`#/read/${r.b.id}/${r.ch}`+(r.vs?'/'+r.vs:''));
+}else go('#/search/'+encodeURIComponent(text));
+};
+async function runSearch(text){
+show('search');
+lastSearch=text;
+$('#q').value=text;
+const box=$('#results'),sum=$('#sSum');
+box.replaceChildren();
+sum.textContent='Searching…';
+try{
+const d=await jget('verse.php?'+qs({q:text}));
+terms=d.terms;
+const name=info.translations[d.translation]||d.translation.toUpperCase();
+sum.textContent=d.total
+?`${d.total} verse${d.total>1?'s':''} found in ${name}`+(d.total>d.results.length?`, showing the first ${d.results.length}.`:'.')
+:`No verses found for “${text}” in ${name}.`;
+if(d.note)box.append(el('p','note',d.note));
+let shown=0;
+const more=el('button','btn light');
+more.type='button';
+box.append(more);
+const draw=()=>{
+d.results.slice(shown,shown+100).forEach(r=>{
+const a=el('a','res');
+a.href=`#/read/${r.id}/${r.chapter}/${r.verse}`;
+a.append(el('b',0,`${r.book} ${r.chapter}:${r.verse}`));
+hl(a,r.text);
+more.before(a);
+});
+shown=Math.min(shown+100,d.results.length);
+more.hidden=shown>=d.results.length;
+more.textContent=`Show more (${d.results.length-shown} left)`;
+};
+more.onclick=draw;
+draw();
+}catch(e){
+sum.textContent=e.message;
+}
+}
+
+// Display the daily Bible verse
+async function renderDaily(){
+const day=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);
+const [id,ch,from,to]=DAILY[day%DAILY.length];
+const box=$('#daily');
+try{
+const d=await jget('verse.php?'+qs({book:id,chapter:ch}));
+const picked=d.verses.filter(v=>v.verse>=from&&v.verse<=to);
+const bookName=(books.find(b=>b.id===id)||{name:id}).name;
+const a=el('a',0,`${bookName} ${ch}:${from}`+(to>from?'-'+to:'')+` (${tr.toUpperCase()})`);
+a.href=`#/read/${id}/${ch}/${from}`;
+const c=el('cite');
+c.append(a);
+box.replaceChildren(el('blockquote',0,'“'+picked.map(v=>v.text).join(' ')+'”'),c);
+$('#dailyBox').hidden=false;
+}catch{
+$('#dailyBox').hidden=true;
+}
+}
+
+// Start the application
+(async()=>{
+try{
+await loadInfo();
+}catch(e){
+$('#home').textContent='Could not start: '+e.message;
+return;
+}
+route();
+renderDaily();
+})();
+</script>
+<script src="https://accounts.google.com/gsi/client" async defer onload="gsiReady()"></script>
+</body>
+</html>
